@@ -31,8 +31,11 @@ public class FHAuthUtil {
 
     public static Resolution buildAuthResolver(FHAuthClientConfig authConfig, final FHActCallback callback) throws FHNotReadyException {
         final FHAuthRequest authRequest = FH.buildAuthRequest();
-        authRequest.setPresentingActivity(authConfig.getCallingActivity());
         authRequest.setAuthPolicyId(authConfig.getAuthPolicyId());
+
+
+        authRequest.setPresentingActivity(authConfig.getCallingActivity());
+        authRequest.setAuthUser(authConfig.getAuthPolicyId(),authConfig.getUsername(),authConfig.getPassword());
 
         return new AuthResolution(authRequest, callback);
 

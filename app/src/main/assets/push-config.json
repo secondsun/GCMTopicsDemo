@@ -1,0 +1,8 @@
+{
+  "pushServerURL": "https://jbossunifiedpush-coffeeregister.rhcloud.com/ag-push/",
+  "android": {
+    "senderID": "272275396485",
+    "variantID": "36d59b8b-8482-41e3-a8c1-4a4e83b2203b",
+    "variantSecret": "197aec5a-02cd-4811-8d09-4322a3fd91b4"
+  }
+}

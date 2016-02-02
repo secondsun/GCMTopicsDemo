@@ -37,6 +37,7 @@ import org.feedhenry.client.fh.auth.FHAuthUtil;
 import org.feedhenry.client.fh.events.InitFailed;
 import org.feedhenry.client.fh.events.InitSuccessful;
 import org.feedhenry.client.fh.sync.FHSyncClientConfig;
+import org.json.fh.JSONArray;
 import org.json.fh.JSONObject;
 
 import java.net.MalformedURLException;
@@ -82,13 +83,14 @@ public class FHClient {
 
                 if (authConfig != null) {
                     performAuthThenSync(fhResponse);
-                } else {
+                } else if (syncBuilder != null){
                     try {
                         setupSync(fhResponse);
                     } catch (Exception e) {
-
                         postConnectFailureRunner(new FHResponse(null, null, e, e.getMessage()));
                     }
+                } else {
+                    postConnectSuccessRunner(fhResponse);
                 }
             }
 
@@ -122,7 +124,11 @@ public class FHClient {
                                         if (syncBuilder != null) {
                                             syncBuilder.addMetaData(FHAuthSession.SESSION_TOKEN_KEY, session.getToken());
                                         }
-                                        setupSync(fhResponse);
+                                        if (syncBuilder != null) {
+                                            setupSync(fhResponse);
+                                        } else {
+                                            postConnectSuccessRunner(fhResponse);
+                                        }
                                     }
 
                                     @Override
@@ -300,19 +306,28 @@ public class FHClient {
             client.appContext = context;
 
             if (this.syncBuilder != null) {
-
                 client.syncListener = syncBuilder.getSyncListener();
                 client.syncBuilder = syncBuilder;
             }
-
             if (this.authBuilder != null) {
                 client.authConfig = authBuilder;
             }
 
-
             return client;
         }
 
+
+    }
+
+
+    public void addAuth(FHAuthClientConfig authConfig) {
+        if (this.authConfig != null) {
+            //TODO: deactivate current auth
+        }
+
+        this.authConfig = authConfig;
+
+        performAuthThenSync(new FHResponse(new JSONObject(), new JSONArray(), null, null));
 
     }
 

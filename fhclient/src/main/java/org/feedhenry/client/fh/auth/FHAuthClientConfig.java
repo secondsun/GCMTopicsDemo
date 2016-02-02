@@ -25,6 +25,7 @@ public class FHAuthClientConfig {
 
     private String authPolicyId;
     private Activity callingActivity;
+    private String password, username;
 
     public FHAuthClientConfig(String authPolicyId) {
         this.authPolicyId = authPolicyId;
@@ -32,6 +33,24 @@ public class FHAuthClientConfig {
 
     public FHAuthClientConfig setAuthPolicyId(String authPolicyId) {
         this.authPolicyId = authPolicyId;
+        return this;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public FHAuthClientConfig setUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public FHAuthClientConfig setPassword(String password) {
+        this.password = password;
         return this;
     }
 
