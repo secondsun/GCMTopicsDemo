@@ -8,8 +8,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.otto.Bus;
 
 import org.feedhenry.client.fh.FHClient;
+import org.feedhenry.client.fh.auth.FHAuthClientConfig;
 import org.feedhenry.demo.gcmtopicsdemo.GCMTopicDemoApplication;
 import org.feedhenry.demo.gcmtopicsdemo.MainActivity;
+import org.feedhenry.demo.gcmtopicsdemo.SignInFragment;
 import org.feedhenry.demo.gcmtopicsdemo.SplashScreenActivity;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -21,7 +23,7 @@ import dagger.Provides;
 
 @Module(
         injects = {
-                GCMTopicDemoApplication.class, MainActivity.class, SplashScreenActivity.class
+                GCMTopicDemoApplication.class, MainActivity.class, SplashScreenActivity.class, SignInFragment.class
         }
 )
 public class ApplicationModule {
@@ -42,6 +44,7 @@ public class ApplicationModule {
         final AtomicReference<FHClient> clientRef = new AtomicReference<>();
 
         FHClient fhclient = new FHClient.Builder(context, bus)
+                .addFeature(new FHAuthClientConfig("Android"))
                 .build();
         clientRef.set(fhclient);;
 

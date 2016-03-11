@@ -55,13 +55,12 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
-    private static final int RC_SIGN_IN = 0x100;
+    public static final int RC_SIGN_IN = 0x100;
     @Inject
     FHClient fhClient;
     @Inject
     Bus bus;
-    @Inject
-    GoogleApiClient googleApiClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,16 +68,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                GoogleApiClient apiClient = googleApiClient;
-                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(apiClient);
-                startActivityForResult(signInIntent, RC_SIGN_IN);
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -89,6 +78,10 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         initInjection();
+
+        if (fhClient.getAccount() == null) {
+            getFragmentManager().beginTransaction().add(R.id.content_main, SignInFragment.newInstance()).commit();
+        }
     }
 
     private void initInjection() {
@@ -98,7 +91,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (RC_SIGN_IN == requestCode) {
+            if (resultCode != RESULT_OK) {
+                return;
+            }
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+
+
 
             FHAuthRequest authRequest = new FHAuthRequest(getApplicationContext(), new FHAuthSession(DataManager.getInstance(), new FHHttpClient()));
             authRequest.setAuthUser("Android", result.getSignInAccount().getIdToken(), "!");
