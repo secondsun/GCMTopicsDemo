@@ -6,23 +6,22 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-
     <application xmlns:tools="http://schemas.android.com/tools"
         android:name=".GCMTopicDemoApplication"
-        tools:replace="android:icon, android:allowBackup"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/MyTheme.Base">
+        android:theme="@style/MyTheme.Base"
+        tools:replace="android:icon, android:allowBackup">
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/MyTheme.Base">
-        </activity>
+            android:theme="@style/MyTheme.Base"></activity>
         <activity
             android:name=".SplashScreenActivity"
             android:label="@string/app_name"
@@ -33,6 +32,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name=".content.FehBotContentProvider"
+            android:authorities="org.feedhenry.fehbot"
+            android:enabled="true"
+            android:exported="false"></provider>
     </application>
 
 </manifest>
